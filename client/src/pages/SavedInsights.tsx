@@ -1,0 +1,12 @@
+import { Button } from "@/components/ui/button";
+import QueryError from "@/components/QueryError";
+import { trpc } from "@/lib/trpc";
+import { BookmarkCheck, Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+export default function SavedInsights() {
+  const utils = trpc.useUtils();
+  const insights = trpc.insights.list.useQuery();
+  const remove = trpc.insights.delete.useMutation({ onSuccess: () => { utils.insights.list.invalidate(); toast.success("Saved insight removed."); }, onError: error => toast.error(error.message) });
+  return <div className="space-y-6"><div><p className="text-sm font-semibold text-white">Saved Insights</p><p className="mt-1 text-sm text-slate-500">Keep the important analyses that you may need to review or share later.</p></div>{insights.error && <QueryError message={insights.error.message} onRetry={() => insights.refetch()} />}{insights.isLoading ? <div className="rounded-2xl border border-slate-800 p-8 text-sm text-slate-500">Loading saved insights…</div> : insights.data?.length ? <div className="grid gap-4 lg:grid-cols-2">{insights.data.map(({ insight, analysis }) => <article className="rounded-2xl border border-slate-800 bg-slate-900/45 p-5" key={insight.id}><div className="flex items-start justify-between gap-4"><div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-400/10 text-blue-300"><BookmarkCheck className="h-5 w-5" /></div><Button variant="ghost" size="icon" disabled={remove.isPending} onClick={() => remove.mutate({ insightId: insight.id })} className="text-slate-500 hover:bg-red-400/10 hover:text-red-300"><Trash2 className="h-4 w-4" /></Button></div><h2 className="mt-5 text-lg font-semibold text-white">{insight.title}</h2><p className="mt-3 line-clamp-5 whitespace-pre-wrap text-sm leading-6 text-slate-400">{analysis?.answer || "The original analysis is no longer available."}</p><div className="mt-5 flex items-center justify-between border-t border-slate-800 pt-4 text-xs text-slate-500"><span>Run #{insight.analysisRunId}</span><span>{new Date(insight.createdAt).toLocaleDateString()}</span></div></article>)}</div> : <div className="grid min-h-72 place-items-center rounded-3xl border border-dashed border-slate-800 bg-slate-900/30 text-center"><div><BookmarkCheck className="mx-auto h-8 w-8 text-slate-600" /><p className="mt-4 font-medium text-slate-300">Nothing saved yet</p><p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">When an analyst response matters, save it directly from the conversation to retain it here.</p></div></div>}</div>;
+}

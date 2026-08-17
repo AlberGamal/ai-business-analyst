@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ai_business_analyst}
+      MYSQL_USER: ${MYSQL_USER:-ai_analyst}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      DATABASE_URL: mysql://${MYSQL_USER:-ai_analyst}:${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}@db:3306/${MYSQL_DATABASE:-ai_business_analyst}
+      STORAGE_DIR: /app/data/uploads
+    command: sh -c "pnpm drizzle-kit migrate && node dist/index.js"
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_data:/app/data/uploads
+
+volumes:
+  mysql_data:
+  uploads_data:

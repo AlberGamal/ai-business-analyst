@@ -1,0 +1,13 @@
+ALTER TABLE `analysisEvents` ADD CONSTRAINT `analysisEvents_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `analysisEvents` ADD CONSTRAINT `analysisEvents_datasetId_datasets_id_fk` FOREIGN KEY (`datasetId`) REFERENCES `datasets`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `analysisEvents` ADD CONSTRAINT `analysisEvents_analysisRunId_analysisRuns_id_fk` FOREIGN KEY (`analysisRunId`) REFERENCES `analysisRuns`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `analysisRuns` ADD CONSTRAINT `analysisRuns_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `analysisRuns` ADD CONSTRAINT `analysisRuns_datasetId_datasets_id_fk` FOREIGN KEY (`datasetId`) REFERENCES `datasets`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `analysisRuns` ADD CONSTRAINT `analysisRuns_conversationId_conversations_id_fk` FOREIGN KEY (`conversationId`) REFERENCES `conversations`(`id`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `conversationMessages` ADD CONSTRAINT `conversationMessages_conversationId_conversations_id_fk` FOREIGN KEY (`conversationId`) REFERENCES `conversations`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `conversationMessages` ADD CONSTRAINT `conversationMessages_analysisRunId_analysisRuns_id_fk` FOREIGN KEY (`analysisRunId`) REFERENCES `analysisRuns`(`id`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `conversations` ADD CONSTRAINT `conversations_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `conversations` ADD CONSTRAINT `conversations_datasetId_datasets_id_fk` FOREIGN KEY (`datasetId`) REFERENCES `datasets`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `datasets` ADD CONSTRAINT `datasets_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `savedInsights` ADD CONSTRAINT `savedInsights_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `savedInsights` ADD CONSTRAINT `savedInsights_analysisRunId_analysisRuns_id_fk` FOREIGN KEY (`analysisRunId`) REFERENCES `analysisRuns`(`id`) ON DELETE cascade ON UPDATE no action;

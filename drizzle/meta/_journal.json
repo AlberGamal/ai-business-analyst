@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1786961773344,
+      "tag": "0000_equal_killer_shrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1786961998671,
+      "tag": "0001_odd_firelord",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786963739694,
+      "tag": "0002_keen_bloodaxe",
+      "breakpoints": true
+    }
+  ]
+}

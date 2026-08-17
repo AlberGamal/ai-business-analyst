@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.env
+.env.*
+.manus
+.manus-logs
+.project-config.json
+client/public/__manus__
+data
+*.zip
